@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <title>ChatGPT-Tailwind</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="https://unpkg.com/daisyui@3.5.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, "Microsoft YaHei", Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif !important;
+        }
+    </style>
+    <link href="./css.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="pb-72 pt-20 h-full">
+    <!-- 头部展示 -->
+    <div class="w-full fixed top-0 bg-gray-700 text-center py-5 z-50">
+        <h1 class="text-white text-lg font-bold" >ChatGPT-Tailwind</h1>
+    </div>
+
+    <!-- 填写地址和密钥 -->
+    <div class="container mx-auto bg-blue-300 px-4 py-5  shadow-md hover:shadow-blue-500/50 -mt-5">
+        <div class="flex flex-wrap items-center justify-evenly ">
+            <div class="w-full sm:w-2/5 mb-4 px-4">
+                <div class="flex flex-col">
+                    <div class="flex items-center mb-1">
+                        <b>网址：</b>
+                        <input
+                            class="border-2 border-gray-300 bg-white h-10 px-2 rounded-lg text-sm flex-grow focus:outline-none"
+                            placeholder="api.openai.com" type="text" id="proxyurl" required value="oapi.czl.net" />
+                    </div>
+
+                    <p class="text-xs italics ">*代理域名，无需"https://"</p>
+                </div>
+            </div>
+            <div class="w-full sm:w-2/5 mb-4 px-4">
+                <div class="flex flex-col">
+                    <div class="flex items-center mb-1">
+                        <b>Key：</b>
+                        <input
+                            class="border-2 border-gray-300 bg-white h-10 px-2 rounded-lg text-sm flex-grow focus:outline-none"
+                            placeholder="sk-xxxxxxxxxxx" type="text" id="key" required />
+                    </div>
+                    <div class="text-xs italics">*填写你的key，<a href="https://oapi.czl.net" target="_blank"
+                            class="link link-error">获取国内可用key</a></div>
+                </div>
+            </div>
+
+            <div class="w-full sm:w-1/5 mb-4 px-4">
+                <div class="flex flex-col">
+                    <div class="flex items-center mb-1">
+                        <b>模型：</b>
+                        <select
+                            class="border-2 border-gray-300 bg-white h-10 px-2 rounded-lg text-sm flex-grow focus:outline-none select-primary"
+                            id="model">
+                            <!-- your options here -->
+                            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                            <option value="gpt-3.5-turbo-0301">gpt-3.5-turbo-0301</option>
+                            <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo-0613</option>
+                            <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
+                            <option value="gpt-3.5-turbo-16k-0613">gpt-3.5-turbo-16k-0613</option>
+                            <option value="gpt-4">gpt-4</option>
+                            <option value="gpt-4-0301">gpt-4-0301</option>
+                            <option value="gpt-4-0613">gpt-4-0613</option>
+                            <option value="gpt-4-32k">gpt-4-32k</option>
+                            <option value="gpt-4-32k-0613">gpt-4-32k-0613</option>
+                            <option value="PaLM-2">PaLM-2</option>
+                            <option value="ERINIE-Bot">ERNIE-Bot</option>
+                            <option value="ERNIE-Bot-turbo">ERNIE-Bot-turbo</option>
+                            <option value="BLOOMZ-7B">BLOOMZ-7B</option>
+                            <option value="Embedding-V1">Embedding-V1</option>
+                            <option value="chatglm_std">chatglm_std</option>
+                            <option value="chatglm_lite">chatglm_lite</option>
+                            <option value="chatglm_pro">chatglm_pro</option>
+                            <option value="qwen-v1">qwen-v1</option>
+                            <option value="qwen-plus-v1">qwen-plus-v1</option>
+                            <option value="SparkDesk">SparkDesk</option>
+                        </select>
+                    </div>
+                    <div class="text-xs italics">*选择模型</div>
+                </div>
+            </div>
+            <div class="w-full ">
+                <div class="flex items-center">
+                </div>
+            </div>
+        </div>
+        <div class="text-center py-2 bg-blue-100">
+            本项目由<a href="https://woodchen.ink" target="_blank" class="link link-accent">woodchen</a>开源于<a
+                class="link link-accent" href="https://github.com/woodchen-ink/ChatGPT-Tailwind"
+                target="_blank">Github</a>, 欢迎给个star
+        </div>
+    </div>
+
+    <!-- 对话展示 -->
+    <div class="container mx-auto" id="chatbox">
+    </div>
+
+    <!-- 底部固定 -->
+    <div class="w-full fixed bottom-0 bg-gray-700 py-4">
+        <div class="container mx-auto">
+            <textarea id="userInput" class="w-full textarea textarea-inf" type="text" rows="3"
+                placeholder="在这里输入问题...换行请按Shift+Enter"></textarea>
+            <button id="sendButton" class="btn  btn-info   btn-block">询问</button>
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/jquery@3.7.0/dist/jquery.min.js"></script>
+    <script>
+        const url = new URL(window.location.href);
+        const chatbox = $("#chatbox");
+        const userInput = $("#userInput");
+        const sendButton = $("#sendButton");
+        $(document).ready(function () {
+            const messages = [];
+
+            sendButton.on("click", () => {
+                const message = userInput.val();
+                if (message) {
+                    messages.push({
+                        "role": "user",
+                        "content": message
+                    });
+                    chatbox.append(`<div class="chat chat-end"><div class="chat-image avatar">
+                        <div class="w-10 rounded-full">
+                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b992cf86e.png" />
+                        </div>
+                        </div>
+                        <div class="chat-header">You</div><div class="chat-bubble chat-bubble-info">${message}</div><div>`);
+                    userInput.val("");
+                    sendButton.html('<span class="loading loading-infinity loading-lg"></span>');
+                    sendButton.removeClass('btn-info').addClass('btn-error');
+                    // sendButton.prop("disabled", true);
+                    fetchMessages();
+                }
+            });
+
+            userInput.on("keydown", (event) => {
+                if (event.keyCode === 13 && !event.ctrlKey && !event.shiftKey) {
+                    event.preventDefault();
+                    sendButton.click();
+                } else if (event.keyCode === 13 && (event.ctrlKey || event.shiftKey)) {
+                    event.preventDefault();
+                    const cursorPosition = userInput.prop("selectionStart");
+                    const currentValue = userInput.val();
+                    userInput.val(
+                        currentValue.slice(0, cursorPosition) +
+                        "\n" +
+                        currentValue.slice(cursorPosition)
+                    );
+                    userInput.prop("selectionStart", cursorPosition + 1);
+                    userInput.prop("selectionEnd", cursorPosition + 1);
+                }
+            });
+
+            function fetchMessages() {
+                let proxyurl = document.getElementById("proxyurl").value;
+                let key = document.getElementById("key").value;
+                let modelElement = document.getElementById("model");
+                let model = modelElement.options[modelElement.selectedIndex].value;
+                $("#proxyurl").val();
+                $("#key").val();
+
+                try {
+                    var settings = {
+                        "url": "https://" + proxyurl + "/v1/chat/completions",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                            "Authorization": "Bearer " + key,
+                            "Content-Type": "application/json"
+                        },
+                        "data": JSON.stringify({
+                            "model": model,
+                            "messages": messages
+                        }),
+                    };
+
+                    $.ajax(settings).done(function (response) {
+                        console.log(response);
+
+                        const message = response.choices[0].message;
+                        messages.push({
+                            "role": message.role,
+                            "content": message.content
+                        });
+
+                        const htmlText = window.markdownit().render(message.content);
+                        chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
+                        <div class="w-10 rounded-full">
+                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
+                        </div>
+                        </div>
+                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-accent prose prose-slate">${htmlText}</div><div>`);
+                        sendButton.html('<span>询问</span>');
+                        sendButton.removeClass('btn-error').addClass('btn-info');
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        var response = JSON.parse(jqXHR.responseText);
+                        sendButton.html('<span>询问</span>');
+                        sendButton.removeClass('btn-error').addClass('btn-info');
+                        chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
+                        <div class="w-10 rounded-full">
+                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
+                        </div>
+                        </div>
+                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${response.error.message}</div><div>`);
+                    });
+
+                } catch (error) {
+                    sendButton.html('<span>询问</span>');
+                    sendButton.removeClass('btn-error').addClass('btn-info');
+                    chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
+                        <div class="w-10 rounded-full">
+                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
+                        </div>
+                        </div>
+                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${error.message}</div><div>`);
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
