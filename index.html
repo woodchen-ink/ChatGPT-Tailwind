@@ -133,7 +133,7 @@
                         <img src="https://cdn-img.czl.net/2023/08/10/64d3b992cf86e.png" />
                         </div>
                         </div>
-                        <div class="chat-header">You</div><div class="prose chat-bubble chat-bubble-info">${message}</div><div>`);
+                        <div class="chat-header">You</div><div class="chat-bubble chat-bubble-info">${message}</div><div>`);
                     userInput.val("");
                     sendButton.html('<span class="loading loading-infinity loading-lg"></span>');
                     sendButton.removeClass('btn-info').addClass('btn-error');
@@ -211,7 +211,7 @@
                         <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
                         </div>
                         </div>
-                        <div class="chat-header">AI</div><div class="prose chat-bubble chat-bubble-error prose prose-slate">Error: ${response.error.message}</div><div>`);
+                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${response.error.message}</div><div>`);
                     });
 
                 } catch (error) {
@@ -222,7 +222,7 @@
                         <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
                         </div>
                         </div>
-                        <div class="chat-header">AI</div><div class="prose chat-bubble chat-bubble-error prose prose-slate">Error: ${error.message}</div><div>`);
+                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${error.message}</div><div>`);
                 }
             }
         });
