@@ -6,7 +6,7 @@
     <title>ChatGPT-Tailwind</title>
     <meta name="viewport"
         content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-        <link rel="shortcut icon" href="https://cdn-img-qiniu.czl.net/2023/08/03/64cb6db97b0bf.png">
+    <link rel="shortcut icon" href="https://cdn-img-qiniu.czl.net/2023/08/03/64cb6db97b0bf.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/3.6.4/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
@@ -21,7 +21,7 @@
 <body class="pb-72 pt-20 h-full">
     <!-- 头部展示 -->
     <div class="w-full fixed top-0 bg-gray-700 text-center py-5 z-50">
-        <h1 class="text-white text-lg font-bold" >ChatGPT-Tailwind</h1>
+        <h1 class="text-white text-lg font-bold">ChatGPT-Tailwind</h1>
     </div>
 
     <!-- 填写地址和密钥 -->
@@ -45,7 +45,8 @@
                         <b>Key：</b>
                         <input
                             class="border-2 border-gray-300 bg-white h-10 px-2 rounded-lg text-sm flex-grow focus:outline-none"
-                            placeholder="sk-xxxxxxxxxxx" type="text" id="key" required />
+                            placeholder="sk-xxxxxxxxxxx" type="text" id="key" required
+                            value="sk-qP5kRNXIW3IAfHOS2b75E13490C94090B45d367325AbD6C4" />
                     </div>
                     <div class="text-xs italics">*填写你的key，<a href="https://oapi.czl.net" target="_blank"
                             class="link link-error">获取国内可用key</a></div>
@@ -81,6 +82,11 @@
                             <option value="qwen-v1">qwen-v1</option>
                             <option value="qwen-plus-v1">qwen-plus-v1</option>
                             <option value="SparkDesk">SparkDesk</option>
+                            <option value="360GPT_S2_V9">360GPT_S2_V9</option>
+                            <option value="embedding-bert-512-v1">embedding-bert-512-v1</option>
+                            <option value="embedding_s1_v1">embedding_s1_v1</option>
+                            <option value="semantic_similarity_s1_v1">semantic_similarity_s1_v1</option>
+                            <option value="360GPT_S2_V9.4">360GPT_S2_V9.4</option>
                         </select>
                     </div>
                     <div class="text-xs italics">*选择模型</div>
@@ -112,7 +118,10 @@
     </div>
 
 
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
     <script>
         const url = new URL(window.location.href);
         const chatbox = $("#chatbox");
@@ -184,34 +193,119 @@
                     };
 
                     $.ajax(settings).done(function (response) {
-                        console.log(response);
+                        console.log(response)
 
-                        const message = response.choices[0].message;
+                        const message = response.choices[0].message
                         messages.push({
-                            "role": message.role,
-                            "content": message.content
+                            role: message.role,
+                            content: message.content,
+                        })
+
+                        let htmlText = window.markdownit().render(message.content);
+                        htmlText = htmlText.replace(/<pre>/g, '<pre class="pre-with-button">');
+
+                        const chatBubbleClass =
+                            message.role === 'user'
+                                ? 'chat-bubble-info'
+                                : 'chat-bubble-accent'
+                        const avatarURL =
+                            message.role === 'user'
+                                ? 'https://cdn-img.czl.net/2023/08/10/64d3b992cf86e.png'
+                                : 'https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png'
+                        const chatHeader = message.role === 'user' ? 'You' : 'AI'
+
+                        let myID = 'codeSnippet-' + Date.now()
+                        let preID = 'pre-' + Date.now()
+                        if (htmlText.includes('<code')) {
+
+                            htmlText = htmlText.replace('<pre', '<pre id="' + preID + '"')
+                            htmlText = htmlText.replace('<code', '<code id="' + myID + '"')
+                        }
+                        console.log('htmlText', htmlText)
+                        const chatHTML = `
+			        				<div class="chat chat-start">
+			          							<div class="chat-image avatar">
+			            					<div class="w-10 rounded-full">
+			              			<img src="${avatarURL}" />
+			            					</div>
+			          					</div>
+			       					   <div class="chat-header">${chatHeader}</div>
+			    				      <div class="chat-bubble ${chatBubbleClass} prose prose-slate">${htmlText}</div>
+			   					     </div>`
+
+                        $('#chatbox').append(chatHTML);
+                        $('.pre-with-button').each(function (index) {
+                            if ($(this).find('code').length > 0) {
+                                let preElement = $(this);
+                                let codeElement = $(this).find('code')[0];
+                                var copyButton = document.createElement('button');
+                                copyButton.classList.add('absolute', 'right-5', 'mt-[-20px]', 'mr-1', 'btn', 'btn-active', 'btn-xs');
+                                copyButton.innerText = 'COPY';
+                                var clipboard = new ClipboardJS(copyButton, {
+                                    text: function () {
+                                        return codeElement.innerText;
+                                    },
+                                });
+
+                                clipboard.on('success', function (e) {
+                                    console.log('Success');
+                                    let alertBox = document.createElement('div');
+
+                                    alertBox.classList.add('fixed', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                                    alertBox.innerHTML = `
+        <div class="alert alert-success">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Success! Your text has been copied.</span>
+        </div>`;
+                                    document.body.appendChild(alertBox);
+                                    setTimeout(function () {
+                                        document.body.removeChild(alertBox);
+                                    }, 500);
+                                });
+
+                                clipboard.on('error', function (e) {
+                                    console.log('Failed');
+                                    let alertBox = document.createElement('div');
+
+                                    alertBox.classList.add('fixed', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                                    alertBox.innerHTML = `
+        <div class="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Error! Copy failed.</span>
+        </div>`;
+                                    document.body.appendChild(alertBox);
+                                    setTimeout(function () {
+                                        document.body.removeChild(alertBox);
+                                    }, 500);
+                                })
+
+                                preElement.append(copyButton);
+                            }
                         });
 
-                        const htmlText = window.markdownit().render(message.content);
-                        chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
-                        </div>
-                        </div>
-                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-accent prose prose-slate">${htmlText}</div><div>`);
-                        sendButton.html('<span>询问</span>');
-                        sendButton.removeClass('btn-error').addClass('btn-info');
+                        sendButton.html('<span>询问</span>')
+                        sendButton.removeClass('btn-error').addClass('btn-info')
 
                     }).fail(function (jqXHR, textStatus, errorThrown) {
-                        var response = JSON.parse(jqXHR.responseText);
                         sendButton.html('<span>询问</span>');
                         sendButton.removeClass('btn-error').addClass('btn-info');
+                        var errorMessage;
+                        if (jqXHR.status === 0) {
+                            errorMessage = "Network error, please check your internet connection.";
+                        } else {
+                            var response = JSON.parse(jqXHR.responseText);
+                            errorMessage = response.error.message;
+                        }
                         chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
-                        </div>
-                        </div>
-                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${response.error.message}</div><div>`);
+                    <div class="w-10 rounded-full">
+                    <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
+                    </div>
+                    </div>
+                    <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${errorMessage}</div><div>`);
                     });
 
                 } catch (error) {
