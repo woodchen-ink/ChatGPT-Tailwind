@@ -10,6 +10,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/3.6.4/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/vs2015.min.css" />
     <style>
         body {
             font-family: system-ui, -apple-system, "Microsoft YaHei", Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif !important;
@@ -285,7 +287,7 @@
                                 preElement.append(copyButton);
                             }
                         });
-
+                        hljs.highlightAll();
                         sendButton.html('<span>询问</span>')
                         sendButton.removeClass('btn-error').addClass('btn-info')
 
@@ -320,6 +322,7 @@
             }
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js" defer></script>
 
 </body>
 
