@@ -11,9 +11,8 @@ Telegram交流群：https://t.me/ai_cn2023
 
 ## 例子
 
-![1691602575992.png](https://cdn-img.czl.net/2023/08/10/64d3cea9db3be.png)
+![image](https://github.com/woodchen-ink/ChatGPT-Tailwind/assets/95951386/30f33fb7-5c45-4389-be41-4c9575695106)
 
-![1691602613726.png](https://cdn-img.czl.net/2023/08/10/64d3cecf903b7.png)
 
 
 ## 使用方法

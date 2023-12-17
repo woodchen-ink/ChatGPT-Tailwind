@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-cmn-Hans">
 
 <head>
     <meta charset="utf-8">
     <title>ChatGPT-Tailwind</title>
     <meta name="viewport"
         content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-        <link rel="shortcut icon" href="https://cdn-img-qiniu.czl.net/2023/08/03/64cb6db97b0bf.png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/3.6.4/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="https://cdn-img-qiniu.czl.net/2023/08/03/64cb6db97b0bf.png">
+    <link href="https://cdn.staticfile.org/daisyui/3.9.2/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
+    <script src="https://cdn.staticfile.org/markdown-it/13.0.2/markdown-it.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/vs2015.min.css" />
     <style>
         body {
             font-family: system-ui, -apple-system, "Microsoft YaHei", Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif !important;
         }
     </style>
-    <link href="https://cdn.czl.net/frame/tailwind/typography.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn-r2.czl.net/frame/tailwind/typography.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="pb-72 pt-20 h-full">
     <!-- 头部展示 -->
     <div class="w-full fixed top-0 bg-gray-700 text-center py-5 z-50">
-        <h1 class="text-white text-lg font-bold" >ChatGPT-Tailwind</h1>
+        <h1 class="text-white text-lg font-bold">ChatGPT-Tailwind</h1>
     </div>
 
     <!-- 填写地址和密钥 -->
@@ -66,22 +67,26 @@
                             <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
                             <option value="gpt-3.5-turbo-16k-0613">gpt-3.5-turbo-16k-0613</option>
                             <option value="gpt-4">gpt-4</option>
-                            <option value="gpt-4-0301">gpt-4-0301</option>
+                            <option value="gpt-4-0314">gpt-4-0314</option>
                             <option value="gpt-4-0613">gpt-4-0613</option>
                             <option value="gpt-4-32k">gpt-4-32k</option>
+                            <option value="gpt-4-32k-0314">gpt-4-32k-0314</option>
                             <option value="gpt-4-32k-0613">gpt-4-32k-0613</option>
                             <option value="PaLM-2">PaLM-2</option>
-                            <option value="ERINIE-Bot">ERNIE-Bot</option>
-                            <option value="ERNIE-Bot-turbo">ERNIE-Bot-turbo</option>
-                            <option value="BLOOMZ-7B">BLOOMZ-7B</option>
-                            <option value="Embedding-V1">Embedding-V1</option>
-                            <option value="chatglm_std">chatglm_std</option>
-                            <option value="chatglm_lite">chatglm_lite</option>
-                            <option value="chatglm_pro">chatglm_pro</option>
-                            <option value="qwen-v1">qwen-v1</option>
-                            <option value="qwen-plus-v1">qwen-plus-v1</option>
-                            <option value="SparkDesk">SparkDesk</option>
-                            <option value="gemini-pro">gemini-pro</option>
+                            <option value="claude-instant-1">[Claude]claude-instant-1</option>
+                            <option value="claude-2">[Claude]claude-2</option>
+                            <option value="ERNIE-Bot">[百度]ERNIE-Bot</option>
+                            <option value="ERNIE-Bot-turbo">[百度]ERNIE-Bot-turbo</option>
+                            <option value="PaLM-2">[google]PaLM-2</option>
+                            <option value="chatglm_pro">[智谱]chatglm_pro</option>
+                            <option value="chatglm_std">[智谱]chatglm_std</option>
+                            <option value="chatglm_lite">[智谱]chatglm_lite</option>
+                            <option value="qwen-turbo">[阿里]qwen-turbo</option>
+                            <option value="qwen-plus">[阿里]qwen-plus</option>
+                            <option value="SparkDesk">[讯飞]SparkDesk</option>
+                            <option value="360GPT_S2_V9">[360]360GPT_S2_V9</option>
+                            <option value="hunyuan">[腾讯]hunyuan</option>
+
                         </select>
                     </div>
                     <div class="text-xs italics">*选择模型</div>
@@ -113,7 +118,10 @@
     </div>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+    <script src="https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/clipboard.js/2.0.11/clipboard.min.js"></script>
     <script>
         const url = new URL(window.location.href);
         const chatbox = $("#chatbox");
@@ -131,7 +139,7 @@
                     });
                     chatbox.append(`<div class="chat chat-end"><div class="chat-image avatar">
                         <div class="w-10 rounded-full">
-                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b992cf86e.png" />
+                        <img src="https://cdn-img-r2.czl.net/2023/08/10/64d3b992cf86e.png" />
                         </div>
                         </div>
                         <div class="chat-header">You</div><div class="chat-bubble chat-bubble-info">${message}</div><div>`);
@@ -185,34 +193,119 @@
                     };
 
                     $.ajax(settings).done(function (response) {
-                        console.log(response);
+                        console.log(response)
 
-                        const message = response.choices[0].message;
+                        const message = response.choices[0].message
                         messages.push({
-                            "role": message.role,
-                            "content": message.content
-                        });
+                            role: message.role,
+                            content: message.content,
+                        })
 
-                        const htmlText = window.markdownit().render(message.content);
-                        chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
-                        </div>
-                        </div>
-                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-accent prose prose-slate">${htmlText}</div><div>`);
-                        sendButton.html('<span>询问</span>');
-                        sendButton.removeClass('btn-error').addClass('btn-info');
+                        let htmlText = window.markdownit().render(message.content);
+                        htmlText = htmlText.replace(/<pre>/g, '<pre class="pre-with-button">');
+
+                        const chatBubbleClass =
+                            message.role === 'user'
+                                ? 'chat-bubble-info'
+                                : 'chat-bubble-accent'
+                        const avatarURL =
+                            message.role === 'user'
+                                ? 'https://cdn-img-r2.czl.net/2023/08/10/64d3b992cf86e.png'
+                                : 'https://cdn-img-r2.czl.net/2023/08/10/64d3b8c9819c7.png'
+                        const chatHeader = message.role === 'user' ? 'You' : 'AI'
+
+                        let myID = 'codeSnippet-' + Date.now()
+                        let preID = 'pre-' + Date.now()
+                        if (htmlText.includes('<code')) {
+
+                            htmlText = htmlText.replace('<pre', '<pre id="' + preID + '"')
+                            htmlText = htmlText.replace('<code', '<code id="' + myID + '"')
+                        }
+                        console.log('htmlText', htmlText)
+                        const chatHTML = `
+			        				<div class="chat chat-start">
+			          							<div class="chat-image avatar">
+			            					<div class="w-10 rounded-full">
+			              			<img src="${avatarURL}" />
+			            					</div>
+			          					</div>
+			       					   <div class="chat-header">${chatHeader}</div>
+			    				      <div class="chat-bubble ${chatBubbleClass} prose prose-slate">${htmlText}</div>
+			   					     </div>`
+
+                        $('#chatbox').append(chatHTML);
+                        $('.pre-with-button').each(function (index) {
+                            if ($(this).find('code').length > 0) {
+                                let preElement = $(this);
+                                let codeElement = $(this).find('code')[0];
+                                var copyButton = document.createElement('button');
+                                copyButton.classList.add('absolute', 'right-5', 'mt-[-20px]', 'mr-1', 'btn', 'btn-active', 'btn-xs');
+                                copyButton.innerText = 'COPY';
+                                var clipboard = new ClipboardJS(copyButton, {
+                                    text: function () {
+                                        return codeElement.innerText;
+                                    },
+                                });
+
+                                clipboard.on('success', function (e) {
+                                    console.log('Success');
+                                    let alertBox = document.createElement('div');
+
+                                    alertBox.classList.add('fixed', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                                    alertBox.innerHTML = `
+        <div class="alert alert-success">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Success! Your text has been copied.</span>
+        </div>`;
+                                    document.body.appendChild(alertBox);
+                                    setTimeout(function () {
+                                        document.body.removeChild(alertBox);
+                                    }, 500);
+                                });
+
+                                clipboard.on('error', function (e) {
+                                    console.log('Failed');
+                                    let alertBox = document.createElement('div');
+
+                                    alertBox.classList.add('fixed', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                                    alertBox.innerHTML = `
+        <div class="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Error! Copy failed.</span>
+        </div>`;
+                                    document.body.appendChild(alertBox);
+                                    setTimeout(function () {
+                                        document.body.removeChild(alertBox);
+                                    }, 500);
+                                })
+
+                                preElement.append(copyButton);
+                            }
+                        });
+                        hljs.highlightAll();
+                        sendButton.html('<span>询问</span>')
+                        sendButton.removeClass('btn-error').addClass('btn-info')
 
                     }).fail(function (jqXHR, textStatus, errorThrown) {
-                        var response = JSON.parse(jqXHR.responseText);
                         sendButton.html('<span>询问</span>');
                         sendButton.removeClass('btn-error').addClass('btn-info');
+                        var errorMessage;
+                        if (jqXHR.status === 0) {
+                            errorMessage = "Network error, please check your internet connection.";
+                        } else {
+                            var response = JSON.parse(jqXHR.responseText);
+                            errorMessage = response.error.message;
+                        }
                         chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
-                        </div>
-                        </div>
-                        <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${response.error.message}</div><div>`);
+                    <div class="w-10 rounded-full">
+                    <img src="https://cdn-img-r2.czl.net/2023/08/10/64d3b8c9819c7.png" />
+                    </div>
+                    </div>
+                    <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${errorMessage}</div><div>`);
                     });
 
                 } catch (error) {
@@ -220,7 +313,7 @@
                     sendButton.removeClass('btn-error').addClass('btn-info');
                     chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
                         <div class="w-10 rounded-full">
-                        <img src="https://cdn-img.czl.net/2023/08/10/64d3b8c9819c7.png" />
+                        <img src="https://cdn-img-r2.czl.net/2023/08/10/64d3b8c9819c7.png" />
                         </div>
                         </div>
                         <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${error.message}</div><div>`);
@@ -228,6 +321,7 @@
             }
         });
     </script>
+    <script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js" defer></script>
 
 </body>
 
