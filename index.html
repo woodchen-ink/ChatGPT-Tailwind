@@ -6,17 +6,17 @@
     <title>ChatGPT-Tailwind</title>
     <meta name="viewport"
         content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <link rel="shortcut icon" href="https://cdn-img-qiniu.czl.net/2023/08/03/64cb6db97b0bf.png">
-    <link href="https://cdn.staticfile.org/daisyui/3.9.2/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="https://i-cf.czl.net/r2/qiniu/2023/08/03/64cb6db97b0bf.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/4.12.14/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.staticfile.org/markdown-it/13.0.2/markdown-it.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/vs2015.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.2/markdown-it.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/vs2015.min.css" />
     <style>
         body {
             font-family: system-ui, -apple-system, "Microsoft YaHei", Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif !important;
         }
     </style>
-    <link href="https://cdn-r2.czl.net/frame/tailwind/typography.css" rel="stylesheet" type="text/css">
+    <link href="https://i.czl.net/g-f/frame/prose.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="pb-72 pt-20 h-full">
@@ -61,26 +61,8 @@
                             class="border-2 border-gray-300 bg-white h-10 px-2 rounded-lg text-sm flex-grow focus:outline-none select-primary"
                             id="model">
                             <!-- your options here -->
-                            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                            <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
-                            <option value="gpt-4">gpt-4-0125-preview</option>
-                            <option value="PaLM-2">PaLM-2</option>
-                            <option value="claude-instant-1">[Claude]claude-instant-1</option>
-                            <option value="claude-2">[Claude]claude-2</option>
-                            <option value="ERNIE-Bot">[百度]ERNIE-Bot</option>
-                            <option value="ERNIE-Bot-turbo">[百度]ERNIE-Bot-turbo</option>
-                            <option value="PaLM-2">[google]PaLM-2</option>
-                            <option value="gemini-pro">[google]gemini-pro</option>
-                            <option value="chatglm_pro">[智谱]chatglm_pro</option>
-                            <option value="chatglm_std">[智谱]chatglm_std</option>
-                            <option value="chatglm_lite">[智谱]chatglm_lite</option>
-                            <option value="qwen-turbo">[阿里]qwen-turbo</option>
-                            <option value="qwen-plus">[阿里]qwen-plus</option>
-                            <option value="SparkDesk">[讯飞]SparkDesk</option>
-                            <option value="360GPT_S2_V9">[360]360GPT_S2_V9</option>
-                            <option value="hunyuan">[腾讯]hunyuan</option>
-				<option value="gemini-pro">gemini-pro</option>
-
+                            <option value="gpt-3.5-turbo">gpt-4o-mini</option>
+                            <option value="gpt-3.5-turbo-16k">gpt-4o</option>
                         </select>
                     </div>
                     <div class="text-xs italics">*选择模型</div>
@@ -114,8 +96,8 @@
 
 
 
-    <script src="https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
     <script>
         const url = new URL(window.location.href);
         const chatbox = $("#chatbox");
@@ -133,7 +115,7 @@
                     });
                     chatbox.append(`<div class="chat chat-end"><div class="chat-image avatar">
                         <div class="w-10 rounded-full">
-                        <img src="https://cdn-img-r2.czl.net/2023/08/10/64d3b992cf86e.png" />
+                        <img src="https://i-cf.czl.net/r2/2023/08/10/64d3b992cf86e.png" />
                         </div>
                         </div>
                         <div class="chat-header">You</div><div class="chat-bubble chat-bubble-info">${message}</div><div>`);
@@ -204,8 +186,8 @@
                                 : 'chat-bubble-accent'
                         const avatarURL =
                             message.role === 'user'
-                                ? 'https://cdn-img-r2.czl.net/2023/08/10/64d3b992cf86e.png'
-                                : 'https://cdn-img-r2.czl.net/2023/08/10/64d3b8c9819c7.png'
+                                ? 'https://i-cf.czl.net/r2/2023/08/10/64d3b992cf86e.png'
+                                : 'https://i-cf.czl.net/r2/2023/08/10/64d3b8c9819c7.png'
                         const chatHeader = message.role === 'user' ? 'You' : 'AI'
 
                         let myID = 'codeSnippet-' + Date.now()
@@ -296,7 +278,7 @@
                         }
                         chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
                     <div class="w-10 rounded-full">
-                    <img src="https://cdn-img-r2.czl.net/2023/08/10/64d3b8c9819c7.png" />
+                    <img src="https://i-cf.czl.net/r2/2023/08/10/64d3b8c9819c7.png" />
                     </div>
                     </div>
                     <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${errorMessage}</div><div>`);
@@ -307,7 +289,7 @@
                     sendButton.removeClass('btn-error').addClass('btn-info');
                     chatbox.append(`<div class="chat chat-start"><div class="chat-image avatar">
                         <div class="w-10 rounded-full">
-                        <img src="https://cdn-img-r2.czl.net/2023/08/10/64d3b8c9819c7.png" />
+                        <img src="https://i-cf.czl.net/r2/2023/08/10/64d3b8c9819c7.png" />
                         </div>
                         </div>
                         <div class="chat-header">AI</div><div class="chat-bubble chat-bubble-error prose prose-slate">Error: ${error.message}</div><div>`);
@@ -315,7 +297,7 @@
             }
         });
     </script>
-    <script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js" defer></script>
 
 </body>
 
